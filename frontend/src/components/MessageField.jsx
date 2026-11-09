@@ -1,14 +1,29 @@
+import { api } from '../api/api'
 import Button from './Button'
 import TextArea from './TextArea'
+import { useState } from "react"
+import { useMessageStore } from '../store/useMessageStore'
 
 const MessageField = () => {
+    const [isLoading, setIsLoading] = useState(false)
+    const {getMessages} = useMessageStore()
     const handleSubmit = (e) => {
         e.preventDefault()
+        if (isLoading || e.target.content.value.trim().leingth <= 3) return
         const data = {
             content: e.target.content.value
         }
-
-        console.log(data)
+        try {
+            setIsLoading(true)
+            const res = api.sendMessage(data)
+            getMessages()
+            e.target.reset()   
+        } catch (error) {
+            console.error(error)
+        }
+        finally {
+            setIsLoading(false)
+        }
     }
     return (
         <div className="create-message-section">
