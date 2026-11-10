@@ -40,28 +40,29 @@ const sendMessage = async (message) => {
 }
 
 const getMyMessages = async () => {
-    const res = await getInstance.get("/my-messages")
+    const res = await apiInstance.get("/my-messages")
+    return res
 }
 
 const getStats = async() => {
-    const res = await getInstance.get("/stats")
+    const res = await apiInstance.get("/stats")
     return res
 }
 
 const reportMessage = async(id) => {
-    const res = await getInstance.post("/messages/${id}/report")
+    const res = await apiInstance.post(`/messages/${id}/report`)
     return res
 }
 const likeMessage = async(id) => {
-    const res = await getInstance.post("/messages/${id}/like")
+    const res = await apiInstance.post(`/messages/${id}/like`)
     return res
 }
 const deleteMessage = async(id) => {
-    const res = await getInstance.delete("/messages/${id}")
+    const res = await apiInstance.delete(`/messages/${id}`)
     return res
 }
 const authMe = async() => {
-    const res = await getInstance.get("/auth/me")
+    const res = await apiInstance.get("/auth/me")
     return res
 }
 
@@ -72,8 +73,8 @@ export const api = {
     sendMessage,
     getMyMessages,
     getStats,
-    deleteMessages,
-    likesMessages,
+    deleteMessage,
+    likeMessage,
     reportMessage,
     authMe,
 }

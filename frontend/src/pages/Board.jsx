@@ -3,20 +3,37 @@ import Feed from "../components/Feed"
 import MessageField from "../components/MessageField"
 import { api } from "../api/api"
 import { useUserStore } from "../store/useUserStore"
+import { useMessageStore } from "../store/useMessageStore"
 
 const Board = () => {
     const { user } = useUserStore()
-    const { message, getMessages} = useMessageStore()
+    const [isLoading, setIsLoading] = useState(false)
+    const [error, setError] = useState(null)
+    const { messages, getMessages} = useMessageStore()
     useEffect(() => {
-        getMessages()
+        const load = async () => {
+            setError(null)
+            setIsLoading(true)
+            try {
+               await getMessages()            
+            } catch (error) {
+                console.error(error)
+            } finally{
+                setIsLoading(false)
+            }
+        }
+        load()
     }, [])
 
     return (
         <>
             <h1>Board</h1>
-            {user && <Messagefield />}
-            <MessageField />
+            {user && <MessageField />}
+            {isLoading && <p>Загрузка...</p>}
+            {error && <p>{error}</p>}
+            {messages.length > 0 && (
             <Feed messages={messages} title="Последние сообщения" />
+            )}
         </>
     )
 }
